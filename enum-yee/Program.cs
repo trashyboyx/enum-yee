@@ -1,4 +1,5 @@
 ﻿using enum_yee.Entities;
+using enum_yee.Entities.Enums;
 using System;
 
 namespace enum_yee
@@ -7,26 +8,43 @@ namespace enum_yee
     {
         static void Main(string[] args)
         {
-            Comment comment1 = new Comment("Have a nice trip!");
-            Comment comment2 = new Comment("Wow that's awesome!");
-            Post post1 = new Post(DateTime.Parse("21/06/2018 13:05:44"), 
-                                "Traveling to New Zealand", 
-                                "I'm going to visit this wonderful country", 
-                                12);
-            post1.AddComment(comment1);
-            post1.AddComment(comment2);
+            Console.WriteLine("Enter client data: ");
+            Console.Write("Name: ");
+            string name = Console.ReadLine();
+            Console.Write("Email: ");
+            string email = Console.ReadLine();
+            Console.Write("Birth Date (DD/MM/YYYY): ");
+            DateTime birthDate = DateTime.Parse(Console.ReadLine());
+            Console.WriteLine("Enter order data: ");
+            Console.Write("Status: ");
+            OrderStatus status = Enum.Parse<OrderStatus>(Console.ReadLine());
 
-            Comment comment3 = new Comment("Good night");
-            Comment comment4 = new Comment("May the Force be with you");
-            Post post2 = new Post(DateTime.Parse("18/07/2018"), 
-                                "Good night guys", 
-                                "See you tomorrow", 
-                                5);
-            post2.AddComment(comment3);
-            post2.AddComment(comment4);
+            Client client = new Client(name, email, birthDate);
+            Order order = new Order(DateTime.Now, status, client);
 
-            Console.WriteLine(post1);
-            Console.WriteLine(post2);
+            Console.Write("How many items to this order? ");
+            int numberOfItems = int.Parse(Console.ReadLine());
+            for(int i = 1; i <= numberOfItems; i++)
+            {
+                Console.WriteLine($"Enter #{i} item data:");
+                Console.Write("Product name: ");
+                string productName = Console.ReadLine();
+                Console.Write("Product price: ");
+                double price = double.Parse(Console.ReadLine());
+
+                Product product = new Product(productName, price);
+
+                Console.Write("Quantity: ");
+                int quantity = int.Parse(Console.ReadLine());
+
+                OrderItem orderItem = new OrderItem(quantity, product, price);
+
+                order.AddItem(orderItem);
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("ORDER SUMMARY:");
+            Console.WriteLine(order);
         }
     }
 }
